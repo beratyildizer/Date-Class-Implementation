@@ -119,10 +119,10 @@ namespace project {
 	int operator-(const Date& d1, const Date& d2); //++
 	Date operator+(const Date& date, int n); //++
 	Date operator+(int n, const Date&); //++
-	Weekday& operator++(Weekday&); //30
-	Weekday operator++(Weekday&, int); //30
-	Weekday& operator--(Weekday&); //30
-	Weekday operator--(Weekday&, int); //30}
+	Weekday& operator++(Weekday&); 
+	Weekday operator++(Weekday&, int); 
+	Weekday& operator--(Weekday&); 
+	Weekday operator--(Weekday&, int); 
 }
 
 
