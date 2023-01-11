@@ -26,7 +26,7 @@ the class definition:  https://en.cppreference.com/w/cpp/language/static
 
 #define isleap(year)	(((year % 4) ? 0 : ((year % 100) ? 1 : ((year % 400) ? 0 : 1))))
 
-enum class Weekday {
+enum class Weekday : unsigned int{
 	Sunday,
 	Monday,
 	Tuesday,
