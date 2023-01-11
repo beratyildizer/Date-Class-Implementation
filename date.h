@@ -125,5 +125,4 @@ namespace project {
 	Weekday operator--(Weekday&, int); 
 }
 
-
 #endif DATE_H

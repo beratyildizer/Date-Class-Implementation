@@ -135,6 +135,8 @@ Date Date::operator-(int day)const
 			if (x >= newDay) {
 				temp.month = i;
 				temp.dayOfMonth = newDay - (x - temp.dayOfMonths[i]);
+				if (temp.month == 2 && isleap(temp.year))
+					++temp.dayOfMonth;
 				break;
 			}
 		}
@@ -233,82 +235,12 @@ Date& Date::operator+=(int day)
 
 Date& Date::operator-=(int day)
 {
-	if (day < 1)
-		return *this;
-	int newDay = getYearDay() - day;
-	if (newDay > 0)
-	{
-		int x = 0;
-		for (int i = 1; i <= month; ++i)
-		{
-			x += dayOfMonths[i];
-			if (i == 2 && isleap(year))
-				++x;
-			if (x >= newDay) {
-				month = i;
-				dayOfMonth = newDay - (x - dayOfMonths[i]);
-				break;
-			}
-		}
-	}
-	else {
-		newDay = -newDay;
-		--year;
-		while (newDay > 365) {
-			--year;
-			if (year < 1922) {
-				year = 1922;
-				month = 1;
-				dayOfMonth = 1;
-				this->day = Weekday::Sunday;
-				return *this;
-			}
-			newDay -= isleap(year) ? 366 : 365;
-		}
-		int hand = newDay % (isleap(year) ? 366 : 365);
-		int x = 0;
-		for (int i = 12; i > 0; --i) {
-			x += dayOfMonths[i];
-			if (i == 2 && isleap(year))
-				++x;
-			if (x >= hand) {
-				month = i;
-				dayOfMonth = dayOfMonths[i] - (hand - (x - dayOfMonths[i]));
-				break;
-			}
-		}
-	}
-	int dayTemp = (int)day - (day % 7);
-	if (dayTemp < 0)
-		this->day = Date::dayArray[7 + dayTemp];
-	else
-		this->day = Date::dayArray[dayTemp];
-	return *this;
+	return *this = (*this) - day;
 }
 
 Date& Date::operator++()
 {
-	++dayOfMonth;
-	day = (Weekday)((day < Weekday::Saturday) ? (int)day + 1 : 0);
-	if (dayOfMonth > dayOfMonths[month]) {
-		if (!((month == 2 && isleap(year)) && (dayOfMonth <= (dayOfMonths[month] + 1)))) {
-			dayOfMonth = 1;
-			++month;
-			if (month > 12) {
-				month = 1;
-				++year;
-			}	
-		}	
-	}
-	if (year > 2023) {
-		year = 2023;
-		dayOfMonth = 1;
-		month = 1; 
-		day = Weekday::Sunday;
-	}
-
-	return *this;
-
+	return (*this) += 1;
 }
 
 Date Date::operator++(int)
@@ -320,20 +252,7 @@ Date Date::operator++(int)
 
 Date& Date::operator--()
 {
-	--dayOfMonth;
-	if (dayOfMonth < 1) {
-		--month;
-		if (!month) {
-			month = 12;
-			--year;
-			dayOfMonth = dayOfMonths[month];
-		}
-		else if (month == 2 && isleap(year)) {
-			dayOfMonth = dayOfMonths[month];
-			++dayOfMonth;
-		}else dayOfMonth = dayOfMonths[month];
-	}
-	return *this;
+	return (*this) -= 1;
 }
 
 Date Date::operator--(int)
